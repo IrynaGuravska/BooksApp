@@ -13,6 +13,7 @@
       image: '.books-list .book__image',
     },
   };
+  
   const classes = {
     favorite: 'favorite',
   };
@@ -24,6 +25,14 @@
   const renderBooks = function () {
 
     for (const book of dataSource.books) {
+      const ratingBgc = determineRatingBgc(book.rating);
+      //console.log({ ratingBgc });
+
+      const ratingWidth = (book.rating / 10) * 100;
+      //console.log({ ratingWidth });
+      book.ratingBgc = ratingBgc;
+      book.ratingWidth = ratingWidth;
+
       /*generate HTML based on template*/
       const generatedHTML = templates.books(book);  
       /*create element using utils.createElementFromHTML*/
@@ -89,7 +98,7 @@
       let shouldBeHidden = false;  
 
       const Image = document.querySelector('.book__image[data-id="' + book.id + '"]');
-      
+
       for (let filter of filters){
         if(!book.details[filter]){
           shouldBeHidden = true;
@@ -103,9 +112,24 @@
       }
     }
   };
+  
 
+  const determineRatingBgc = function(rating){
+    let ratingBgc = '';
+    if (rating < 7) {
+      ratingBgc = 'linear-gradient(to bottom, #fefcea 0%, #f1da36 100%';
+    } else if (rating > 7 && rating <= 8) {
+      ratingBgc = 'linear-gradient(to bottom, #b4df5b 0%,#b4df5b 100%';
+    } else if (rating > 8 && rating <= 9) {
+      ratingBgc = 'linear-gradient(to bottom, #299a0b 0%, #299a0b 100%';
+    } else if (rating > 9) {
+      ratingBgc = 'linear-gradient(to bottom, #ff0084 0%,#ff0084 100%';
+    }
+    return ratingBgc;
+  };
   renderBooks();
   initActions();
+  determineRatingBgc();
 }
 
 
